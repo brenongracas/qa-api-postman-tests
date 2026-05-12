@@ -1,0 +1,595 @@
+{
+  "info": {
+    "_postman_id": "10bac057-5594-4d6a-ac13-cb2ae496fd6d",
+    "name": "Testes Postman - QA Portifólio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52136074",
+    "_collection_link": "https://go.postman.co/collection/52136074-10bac057-5594-4d6a-ac13-cb2ae496fd6d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1 - Produtos",
+      "item": [
+        {
+          "name": "Buscar produtos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Existe lista products\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json.products).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Products é array\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json.products).to.be.an(\"array\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/products",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar produtos por id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Produto correto\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(json.id).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Tem título\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(json.title).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/products/1",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar produto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status válido\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Tem ID\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(json.id).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Título correto\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(json.title).to.eql(\"Notebook Gamer\");\r",
+                  "    \r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.environment.set(\"product_id\", json.id);\r",
+                  "\r",
+                  "console.log(json.id);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Notebook Gamer\",\r\n    \"price\" : 5500\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/products/add",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar produto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Título atualizado\", function () {\r",
+                  "    const json = pm.response.json ();\r",
+                  "    pm.expect(json.title).to.eql(\"Produto atualizado\");\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Produto atualizado\",\r\n    \"price\": 9999\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/products/{{product_id}}",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar produto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Produto deletado\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "}); "
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/products/{{product_id}}",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "DELETE produto",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/products/{{product_id}}",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "products",
+                    "{{product_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": ":status",
+                  "value": 200
+                },
+                {
+                  "key": "nel",
+                  "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 07 May 2026 16:10:12 GMT"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"61e-5XxrrCh7+T+UAH4Ri/bqoTpRdGI\""
+                },
+                {
+                  "key": "vary",
+                  "value": "Origin, Accept-Encoding"
+                },
+                {
+                  "key": "cf-ray",
+                  "value": "9f817e54b872fd60-GRU"
+                },
+                {
+                  "key": "server",
+                  "value": "cloudflare"
+                },
+                {
+                  "key": "report-to",
+                  "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ePHJaI32av14tev4ldcAICDYplprjDRr1vCOHv592jteSqQi9RKM7nxFgqva6hdzrWcGkJkhd8f8QDkr0akgapcHy2%2FZx8h60GaZ8kllY3IFhIb6GDje0IxQm8Ujq2oz\"}]}"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "cf-cache-status",
+                  "value": "DYNAMIC"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "100"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "1778170217"
+                },
+                {
+                  "key": "x-download-options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "99"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-dns-prefetch-control",
+                  "value": "off"
+                },
+                {
+                  "key": "strict-transport-security",
+                  "value": "max-age=15552000; includeSubDomains"
+                },
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"title\": \"Essence Mascara Lash Princess\",\n    \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n    \"category\": \"beauty\",\n    \"price\": 9.99,\n    \"discountPercentage\": 10.48,\n    \"rating\": 2.56,\n    \"stock\": 99,\n    \"tags\": [\n        \"beauty\",\n        \"mascara\"\n    ],\n    \"brand\": \"Essence\",\n    \"sku\": \"BEA-ESS-ESS-001\",\n    \"weight\": 4,\n    \"dimensions\": {\n        \"width\": 15.14,\n        \"height\": 13.08,\n        \"depth\": 22.99\n    },\n    \"warrantyInformation\": \"1 week warranty\",\n    \"shippingInformation\": \"Ships in 3-5 business days\",\n    \"availabilityStatus\": \"In Stock\",\n    \"reviews\": [\n        {\n            \"rating\": 3,\n            \"comment\": \"Would not recommend!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Eleanor Collins\",\n            \"reviewerEmail\": \"eleanor.collins@x.dummyjson.com\"\n        },\n        {\n            \"rating\": 4,\n            \"comment\": \"Very satisfied!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Lucas Gordon\",\n            \"reviewerEmail\": \"lucas.gordon@x.dummyjson.com\"\n        },\n        {\n            \"rating\": 5,\n            \"comment\": \"Highly impressed!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Eleanor Collins\",\n            \"reviewerEmail\": \"eleanor.collins@x.dummyjson.com\"\n        }\n    ],\n    \"returnPolicy\": \"No return policy\",\n    \"minimumOrderQuantity\": 48,\n    \"meta\": {\n        \"createdAt\": \"2025-04-30T09:41:02.053Z\",\n        \"updatedAt\": \"2025-04-30T09:41:02.053Z\",\n        \"barcode\": \"5784719087687\",\n        \"qrCode\": \"https://cdn.dummyjson.com/public/qr-code.png\"\n    },\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp\",\n    \"isDeleted\": true,\n    \"deletedOn\": \"2026-05-07T16:10:12.671Z\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2 - Autenticação",
+      "item": [
+        {
+          "name": "Login válido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login realizado\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Token existe\", function () {\r",
+                  "    const json = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(json.accessToken).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"emilys\",\r\n    \"password\": \"emilyspass\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"usuário errado\",\r\n    \"password\": \"senha_errada\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3 - Testes Negativos",
+      "item": [
+        {
+          "name": "Produto sem título",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "{\r",
+                  "    \"price\": 3000\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/products/add",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tipo inválido",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"produto\": Smartphone,\r\n    \"price\": \"2300\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/products/add",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Produto inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/products/9999",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "products",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4 - Performance",
+      "item": [
+        {
+          "name": "Tempo de resposta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Tempo menor que 2 segundos\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}",
+              "host": [
+                "{{baseURL}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
